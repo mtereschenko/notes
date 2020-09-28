@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# http://misc.flogisoft.com/bash/tip_colors_and_formatting
+C_RESET='\e[0m'
+C_RED='\e[31m'
+C_GREEN='\e[32m'
+C_YELLOW='\e[33m'
+
+function __run() { #(step, name, cmd)
+    valid_message_regexp="^NOTES-[0-9]*: .*$"
+    commit_message="$3"
+
+    printf "${C_YELLOW}[%s]${C_RESET} %-20s" "$1" "$2"
+
+    if [[ ! $commit_message =~ $valid_message_regexp ]]; then
+        echo -e "${C_RED}🤬${C_RESET}"
+        exit 1
+    fi
+
+    echo -e "${C_GREEN}✔${C_RESET}"
+}
+
+function __flawless_work() {
+    printf "\n${C_GREEN}[%s]${C_RESET} %-20s" "$1" "$2"
+    echo -e "${C_GREEN}🐼${C_RESET}\n"
+    exit 0
+}
+
+__run "5/5" "check-commit-msg" "$(cat "$1")"
+__flawless_work "^_^" "FLAWLESS WORK"

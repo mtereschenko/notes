@@ -1,0 +1,45 @@
+version: '3'
+services:
+  php:
+    container_name: notes-php
+    build:
+      context: ./docker/local/php/
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./docker/local/php/.env
+    command: php-fpm
+    user: 1000:1000
+    depends_on:
+      - mysql
+    ports:
+      - 9000:9000
+    volumes:
+      - ./:/app:cached
+
+  nginx:
+    container_name: notes-nginx
+    build:
+      context: ./docker/local/nginx/
+      dockerfile: ./Dockerfile
+    depends_on:
+      - php
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/app:cached
+
+  mysql:
+    container_name: notes-mysql
+    env_file:
+      - docker/local/mysql/.env
+    build:
+      context: ./docker/local/mysql/
+      dockerfile: ./Dockerfile
+    command: --init-file /usr/local/mysql/init.sql
+    ports:
+      - 3310:3306
+    volumes:
+      - mysql:/var/lib/mysql
+      - ./docker/local/mysql/init.sql:/usr/local/mysql/init.sql
+volumes:
+  mysql:

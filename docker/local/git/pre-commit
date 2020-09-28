@@ -1,0 +1,54 @@
+#!/bin/bash
+
+LC_ALL=C
+
+# http://misc.flogisoft.com/bash/tip_colors_and_formatting
+C_RESET='\e[0m'
+C_RED='\e[31m'
+C_GREEN='\e[32m'
+C_YELLOW='\e[33m'
+
+function __checkBranch() { #(step, name, cmd)
+    valid_branch_name_regexp="^NOTES-[0-9]*|Merge.*$"
+    local_branch="$(git rev-parse --abbrev-ref HEAD)"
+
+    printf "${C_YELLOW}[%s]${C_RESET} %-20s" "$1" "$2"
+
+    if [[ ! $local_branch =~ $valid_branch_name_regexp ]]; then
+        echo -e "${C_RED}🤬${C_RESET}"
+        exit 1
+    fi
+
+    echo -e "${C_GREEN}✔${C_RESET}"
+}
+
+function __run() #(step, name, cmd)
+{
+    local output exit_code
+
+    printf "${C_YELLOW}[%s]${C_RESET} %-20s" "$1" "$2"
+
+    output=$(eval "$3" 2>&1)
+    exit_code=$?
+
+    if [[ 0 == $exit_code || 130 == $exit_code ]]; then
+        echo -e "${C_GREEN}✔${C_RESET}"
+    else
+        echo -e "${C_RED}🤬${C_RESET}\n\n$output"
+        exit 1
+    fi
+}
+
+modified="git diff --diff-filter=ACM --name-only --cached  | grep \".php$\""
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+__checkBranch "1/5" "check-branch-name"
+__run "2/5" "run-phpstan" "${modified} | xargs -r make run-phpstan"
+__run "3/5" "run-phpcs" "${modified} | xargs -r make run-phpcs"
+__run "4/5" "run-tests" "./vendor/bin/phpunit"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+__checkBranch "1/5" "check-branch-name"
+__run "2/5" "run-phpstan" "${modified} | xargs -I './vendor/bin/phpstan -c ./phpstan.neon --memory-limit 0'"
+__run "3/5" "run-phpcs" "${modified} | xargs -I './vendor/bin/phpcs --colors --standard=./phpcs_rulset.xml -p'"
+__run "4/5" "run-tests" "./vendor/bin/phpunit"
+fi
