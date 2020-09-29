@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ruleset name="Custom Standard" namespace="App\CS\Standard">
+    <description>A custom coding standard</description>
+
+    <file>./app/</file>
+    <file>./tests/</file>
+
+    <exclude-pattern>./database/</exclude-pattern>
+
+    <rule ref="PSR1"/>
+    <rule ref="PSR2"/>
+    <rule ref="PSR12"/>
+</ruleset>

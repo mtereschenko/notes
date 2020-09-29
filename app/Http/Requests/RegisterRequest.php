@@ -10,11 +10,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
 {
-    const NAME_FIELD = User::NAME_ATTRIBUTE;
-    const SURNAME_FIELD = User::SURNAME_ATTRIBUTE;
-    const EMAIL_FIELD = User::EMAIL_ATTRIBUTE;
-    const PASSWORD_FIELD = User::PASSWORD_ATTRIBUTE;
-    const PASSWORD_CONFIRMATION_FIELD = 'password_confirmation';
+    public const NAME_FIELD = User::NAME_ATTRIBUTE;
+    public const SURNAME_FIELD = User::SURNAME_ATTRIBUTE;
+    public const EMAIL_FIELD = User::EMAIL_ATTRIBUTE;
+    public const PASSWORD_FIELD = User::PASSWORD_ATTRIBUTE;
+    public const PASSWORD_CONFIRMATION_FIELD = 'password_confirmation';
 
     /**
      * Get the validation rules that apply to the request.

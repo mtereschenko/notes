@@ -9,10 +9,10 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    const NAME_ATTRIBUTE = 'name';
-    const SURNAME_ATTRIBUTE = 'surname';
-    const PASSWORD_ATTRIBUTE = 'password';
-    const EMAIL_ATTRIBUTE = 'email';
+    public const NAME_ATTRIBUTE = 'name';
+    public const SURNAME_ATTRIBUTE = 'surname';
+    public const PASSWORD_ATTRIBUTE = 'password';
+    public const EMAIL_ATTRIBUTE = 'email';
 
     /**
      * The attributes that are mass assignable.
