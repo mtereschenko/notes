@@ -1,7 +1,9 @@
 <?php
 
 use \App\Http\Requests\RegisterRequest;
+use App\Http\Requests\NoteRequest;
 use \App\Models\User;
+use App\Models\Note;
 
 return [
     'accepted' => 'Ви повинні прийняти :attribute.',
@@ -93,6 +95,9 @@ return [
         RegisterRequest::SURNAME_FIELD => trans('user.' . User::SURNAME_ATTRIBUTE),
         RegisterRequest::PASSWORD_FIELD => trans('user.' . User::PASSWORD_ATTRIBUTE),
         RegisterRequest::PASSWORD_CONFIRMATION_FIELD => trans('auth.confirm_password'),
+
+        NoteRequest::TITLE_FIELD => trans('notes.' . Note::TITLE_ATTRIBUTE),
+        NoteRequest::BODY_FIELD => trans('notes.' . Note::BODY_ATTRIBUTE),
     ],
 
 ];

@@ -15,16 +15,18 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <!-- fontavesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    @yield('before_scripts')
 </head>
 <body>
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
+            <a class="navbar-brand need_to_fade" href="{{ url('/') }}">
+                {{ config('app.name') }}
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -35,7 +37,20 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav mr-auto">
-
+                    @auth
+                        <li class="nav-item">
+                            <a class="nav-link need_to_fade"
+                               href="{{ route('notes.private_notes') }}">@lang('notes.private notes')</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link need_to_fade"
+                               href="{{ route('notes.shared_notes') }}">@lang('notes.shared notes')</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link need_to_fade"
+                               href="{{ route('notes.create_form') }}">@lang('notes.create')</a>
+                        </li>
+                    @endauth
                 </ul>
 
                 <!-- Right Side Of Navbar -->
@@ -43,10 +58,10 @@
                     <!-- Authentication Links -->
                     @guest
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">@lang('auth.Login')</a>
+                            <a class="nav-link need_to_fade" href="{{ route('login') }}">@lang('auth.Login')</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">@lang('auth.Register')</a>
+                            <a class="nav-link need_to_fade" href="{{ route('register') }}">@lang('auth.Register')</a>
                         </li>
                     @else
                         <li class="nav-item dropdown">
@@ -74,7 +89,9 @@
     </nav>
 
     <main class="py-4">
-        @yield('content')
+        <div class="container">
+            @yield('content')
+        </div>
     </main>
 </div>
 </body>

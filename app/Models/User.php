@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -35,4 +37,30 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function notes(): HasMany
+    {
+        return $this->hasMany(Note::class);
+    }
+
+    public function sharedNotes(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Note::class,
+            SharedNote::class,
+            SharedNote::EMAIL_ATTRIBUTE,
+            Note::SLUG_ATTRIBUTE,
+            self::EMAIL_ATTRIBUTE,
+            Note::SLUG_ATTRIBUTE
+        );
+    }
+
+    public function getFullNameAttribute(): string
+    {
+        if (empty($this->attributes['full_name'])) {
+            $this->attributes['full_name'] = "{$this->surname} {$this->name}";
+        }
+
+        return $this->attributes['full_name'];
+    }
 }
