@@ -8,8 +8,6 @@ use App\Models\Note;
 use App\Services\Notes\Exceptions\NoteCantBeViewedException;
 use App\Services\Notes\NotesService;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 
 class NotesController extends Controller
@@ -61,7 +59,7 @@ class NotesController extends Controller
     /**
      * @param $slug
      *
-     * @return Application|\Illuminate\Contracts\View\Factory|View|\Illuminate\View\View
+     * @return Application|\Illuminate\Contracts\View\Factory|View|\Illuminate\View\View|void
      */
     public function showBySlug($slug)
     {
@@ -77,7 +75,7 @@ class NotesController extends Controller
     /**
      * @param $slug
      *
-     * @return Application|\Illuminate\Contracts\View\Factory|View|\Illuminate\View\View
+     * @return Application|\Illuminate\Contracts\View\Factory|View|\Illuminate\View\View|void
      */
     public function editForm($slug)
     {
@@ -131,12 +129,12 @@ class NotesController extends Controller
     /**
      * @param NoteRequest $request
      *
-     * @return Application|\Illuminate\Contracts\View\Factory|View|\Illuminate\View\View|void
+     * @return \Illuminate\Http\JsonResponse
      */
     public function togglePublish(Note $note)
     {
         if (auth()->user()->cant('update', $note)) {
-            return abort(403);
+            return response()->json([403]);
         }
 
         $note = $this->notesService->togglePublish($note);
@@ -147,11 +145,11 @@ class NotesController extends Controller
     /**
      * @param NoteRequest $request
      *
-     * @return Application|\Illuminate\Contracts\View\Factory|View|\Illuminate\View\View|void
+     * @return \Illuminate\Http\JsonResponse
      */
     public function share(ShareNoteRequest $request, Note $note)
     {
-        $note = $this->notesService->share($note, $request->get(ShareNoteRequest::EMAIL_FIELD));
+        $this->notesService->share($note, $request->get(ShareNoteRequest::EMAIL_FIELD));
 
         return response()->json([true]);
     }

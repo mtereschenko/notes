@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services\Notes;
 
 use App\Http\Requests\NoteRequest;
@@ -21,5 +20,4 @@ interface NoteServiceInterface
     public function share(Note $note, string $email);
 
     public function togglePublish(Note $id);
-
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services\Notes;
 
 use App\Http\Requests\NoteRequest;
@@ -9,6 +8,7 @@ use App\Models\SharedNote;
 use App\Models\User;
 use App\Services\Notes\Exceptions\NoteCantBeViewedException;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 
 class NotesService implements NoteServiceInterface
@@ -106,11 +106,10 @@ class NotesService implements NoteServiceInterface
     {
         $note = $this->noteModel->where(Note::SLUG_ATTRIBUTE, $slug)->firstOrFail();
 
-        if (!auth()->check() && $note->{Note::PRIVACY_STATUS_ATTRIBUTE} === Note::PRIVATE) {
-            throw new NoteCantBeViewedException();
-        }
+        $isNotePrivate = $note->{Note::PRIVACY_STATUS_ATTRIBUTE} === Note::PRIVATE;
+        $isOwner = (empty($user)) ? false : $user->getKey() === $note->{Note::USER_ID_ATTRIBUTE};
 
-        if (auth()->check() && auth()->user()->getKey() !== $note->{Note::USER_ID_ATTRIBUTE} && $note->{Note::PRIVACY_STATUS_ATTRIBUTE} === Note::PRIVATE) {
+        if (!$isOwner && $isNotePrivate) {
             throw new NoteCantBeViewedException();
         }
 

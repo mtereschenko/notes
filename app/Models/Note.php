@@ -34,7 +34,8 @@ class Note extends Model
         self::USER_ID_ATTRIBUTE,
     ];
 
-    public function scopeSelectWithoutBody(Builder $builder) {
+    public function scopeSelectWithoutBody(Builder $builder)
+    {
         $table = $this->getTable();
         $builder->select([
             $table . '.' . Note::SLUG_ATTRIBUTE,
@@ -48,7 +49,7 @@ class Note extends Model
         ]);
     }
 
-    public function author() : BelongsTo
+    public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }

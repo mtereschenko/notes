@@ -27,5 +27,17 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Gate::define('view-note', function ($user, $note) {
+            dd(123);
+//            $isNotePrivate = $note->{Note::PRIVACY_STATUS_ATTRIBUTE} === Note::PRIVATE;
+//            dd($isNotePrivate);
+//            $isOwner = (empty($user)) ? false : $user->getKey() === $note->{Note::USER_ID_ATTRIBUTE};
+//
+//            if (!$isOwner && $isNotePrivate) {
+//                return false;
+//            }
+
+            return true;
+        });
     }
 }
